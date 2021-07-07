@@ -1,0 +1,3 @@
+[submodule "TaskImageResize"]
+	path = TaskImageResize
+	url = https://github.com/ryanfernandez2/TaskImageResize.git
