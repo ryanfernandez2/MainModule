@@ -1,3 +1,6 @@
 [submodule "TaskImageResize"]
 	path = TaskImageResize
 	url = https://github.com/ryanfernandez2/TaskImageResize.git
+[submodule "TaskVideoProcess"]
+	path = TaskVideoProcess
+	url = https://github.com/ryanfernandez2/TaskVideoProcess.git
