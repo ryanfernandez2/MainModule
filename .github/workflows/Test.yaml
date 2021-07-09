@@ -10,7 +10,8 @@ on:
     branches:
       - main
 
-build:
+jobs:
+  build:
     runs-on: windows-latest
     steps:
       - name: Checkout
