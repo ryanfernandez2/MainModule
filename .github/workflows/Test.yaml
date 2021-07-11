@@ -16,14 +16,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
-      
-      - name: Setup Dotnet Env
-        uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Publish Funcions
-        run: |
-          dotnet publish .TaskImageResize/src/TaskImageResize.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+          submodules: 'true'
+          token: ${{ secrets.IMAGE_PAT }}
