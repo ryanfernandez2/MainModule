@@ -27,6 +27,7 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}
     environment: ${{ matrix.environment }}
-    run: echo "Hello"
+    steps:
+      run: echo "Hello"
 
   
