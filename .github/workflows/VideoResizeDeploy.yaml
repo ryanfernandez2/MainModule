@@ -85,7 +85,7 @@ jobs:
       - name: Download Function
         uses: actions/download-artifact@v1
         with:
-          name: ImageResizeFunction
+          name: VideoProcessFunction
           path: ${{ env.OUTPUT_PATH }}
 
       - name: Azure login

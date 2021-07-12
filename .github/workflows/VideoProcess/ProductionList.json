@@ -1,0 +1,5 @@
+{
+    "include":[
+        { "functionname": "igusp-subc-fn-videoprocess-dgyhk", "secretname": "SUBC_AZURE_CREDENTIALS", "resourcegroup": "igusp-subc-rg-dgyhk", "storageaccount": "iguspsubcsavidiprocdgyhk", "queuename": "queue", "blobname": "videoprocess" }
+    ]
+}

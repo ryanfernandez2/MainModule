@@ -1,6 +1,6 @@
 {
     "include":[
-        { "functionname": "igusp-suba-fn-videoprocess-fdzap", "secretname": "SUBA_AZURE_CREDENTIALS", "resourcegroup": "igusp-suba-rg-fdzap", "storageaccount": "iguspsubasavidiprocfdzap", "queuename": "queue", "blobname": "videoprocess" }
-        
+        { "functionname": "igusp-suba-fn-videoprocess-fdzap", "secretname": "SUBA_AZURE_CREDENTIALS", "resourcegroup": "igusp-suba-rg-fdzap", "storageaccount": "iguspsubasavidiprocfdzap", "queuename": "queue", "blobname": "videoprocess" },
+        { "functionname": "igusp-subb-fn-videoprocess-wsyql", "secretname": "SUBB_AZURE_CREDENTIALS", "resourcegroup": "igusp-subb-rg-wsyql", "storageaccount": "iguspsubbsavidiprocwsyql", "queuename": "queue", "blobname": "videoprocess" }
     ]
 }
