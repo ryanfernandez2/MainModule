@@ -27,7 +27,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
-    if: ${{ matrix.environment == "Production" }}
+    if: matrix.environment == 'Production'
     environment: ${{ matrix.environment }}
     steps:
     - name: Run Pester
@@ -39,7 +39,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
-    if: ${{ matrix.environment == "Production" }}
+    if: matrix.environment == 'Production'
     environment: ${{ matrix.environment }}
     steps:
     - name: Run Pester
