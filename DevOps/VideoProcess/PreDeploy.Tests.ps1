@@ -47,16 +47,13 @@ Describe "Testing subscription configurations"{
         It "Check if Function App identity type is system assigned"{
             (Get-AzFunctionApp -Name $env:FunctionName -ResourceGroupName $env:ResourceGroup).IdentityType | Should -Be 'SystemAssigned'
         }
-        <#
-        It "Check if Function App identity has 'Storage Blob Data Contributor' role"{
-            $id = (Get-AzFunctionApp -Name $env:FunctionName -ResourceGroupName $env:ResourceGroup).IdentityPrincipalId
-            (Get-AzRoleAssignment -ObjectId $id).RoleDefinitionName -contains 'Storage Blob Data Contributor' | Should -Be $true
+        It "Check ConnctionString app setting"{
+            (Get-AzFunctionAppSetting -Name $env:FunctionName -ResourceGroupName $env:ResourceGroup)['ConnectionString'] | Should -Not -BeNullOrEmpty
         }
-        #>
         It "Check TempPath app setting"{
             (Get-AzFunctionAppSetting -Name $env:FunctionName -ResourceGroupName $env:ResourceGroup)['TempPath'] | Should -Be 'D:\local\temp'
-        }        
-        It "Check ConnctionString app setting"{
+        }
+        It "Check ComponentPath app setting"{
             (Get-AzFunctionAppSetting -Name $env:FunctionName -ResourceGroupName $env:ResourceGroup)['ConnectionString'] | Should -Not -BeNullOrEmpty
         }
     }

@@ -1,8 +1,7 @@
-name: Build and Deploy
+name: TaskImageResize Build and Deploy
 env:
   OUTPUT_PATH: ${{ github.workspace }}\.output
   DOTNET_VERSION: "3.1.*"
-  # FUNCTION_NAME: "ImageResizeTask" # moved inside jobs to work with matrices
 
 on:
   # Change to pull_request and 'main'

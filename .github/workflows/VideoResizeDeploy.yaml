@@ -1,11 +1,10 @@
-name: Build and Deploy
+name: TaskVideoProcess Build and Deploy
 env:
   OUTPUT_PATH: ${{ github.workspace }}\.output
   DOTNET_VERSION: "3.1.*"
-  # FUNCTION_NAME: "ImageResizeTask" # moved inside jobs to work with matrices
 
 on:
-  # Change to pull_request and 'main'
+  # Switch to pull_request and 'main'
   push:
     branches:
       - main
@@ -44,7 +43,7 @@ jobs:
         run: dotnet publish .\TaskVideoProcess\src\TaskVideoProcess.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
 
       - name: Package Functions
-        uses: actions/upload-artifact@v1 # find where the files go to.
+        uses: actions/upload-artifact@v1
         with:
           name: VideoProcessFunction
           path: ${{ env.OUTPUT_PATH }}
