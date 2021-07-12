@@ -22,8 +22,6 @@ jobs:
   testenv2:
     needs: [testenv]
     runs-on: windows-latest
-    strategy:
-      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
     environment: Production
     steps:
     - name: Run Pester
