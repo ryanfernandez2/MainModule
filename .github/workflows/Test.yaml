@@ -25,7 +25,7 @@ jobs:
   testenv:
     runs-on: windows-latest
     strategy:
-      matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
     environment: ${{ matrix.environment }}
     steps:
     - name: Run Pester
