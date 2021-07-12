@@ -23,6 +23,7 @@ jobs:
           echo "::set-output name=config::$TASKS"
 
   testenv:
+    needs: [tenantprep]
     runs-on: windows-latest
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
