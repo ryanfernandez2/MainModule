@@ -8,33 +8,25 @@ on:
   # Change to pull_request and 'main'
   push:
     branches:
-      - main
+      - none
 
 jobs:
-  build:
-    runs-on: windows-latest
+  tenantprep:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.set-matrix.outputs.config }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: 'true'
-          token: ${{ secrets.IMAGE_PAT }}
-      
-      - name: Setup Dotnet Env
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Publish Funcions
-        shell: pwsh
+      - uses: actions/checkout@v2
+      - id: set-matrix
         run: |
-          get-childitem
-          get-childitem -path .\TaskImageResize
-          get-childitem -path .\TaskImageResize\src
-          dotnet publish D:\a\MainModule\MainModule\TaskImageResize\src\TaskImageResize.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+          TASKS=$(echo $(cat .github/workflows/StagingList.json) | sed 's/ //g')
+          echo "::set-output name=config::$TASKS"
 
-      - name: Package Functions
-        uses: actions/upload-artifact@v1 # find where the files go to.
-        with:
-          name: ImageResizeFunction
-          path: ${{ env.OUTPUT_PATH }}
+  testenv:
+    run-on: windows-latest
+    strategy:
+      matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}
+    environment: ${{ matrix.environment }}
+    run: echo "Hello"
+
+  
