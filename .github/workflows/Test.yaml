@@ -19,3 +19,17 @@ jobs:
         with:
           submodules: 'true'
           token: ${{ secrets.IMAGE_PAT }}
+      
+      - name: Setup Dotnet Env
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Publish Funcions
+        run: dotnet publish .TaskImageResize/src/TaskImageResize.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+
+      - name: Package Functions
+        uses: actions/upload-artifact@v1 # find where the files go to.
+        with:
+          name: ImageResizeFunction
+          path: ${{ env.OUTPUT_PATH }}
