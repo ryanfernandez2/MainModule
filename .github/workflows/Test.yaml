@@ -11,36 +11,20 @@ on:
       - main
 
 jobs:
-  tenantprep:
-    runs-on: ubuntu-latest
-    outputs:
-      config: ${{ steps.set-matrix.outputs.config }}
-    steps:
-      - uses: actions/checkout@v2
-      - id: set-matrix
-        run: |
-          TASKS=$(echo $(cat .github/workflows/TenantList.json) | sed 's/ //g')
-          echo "::set-output name=config::$TASKS"
-
   testenv:
-    needs: [tenantprep]
     runs-on: windows-latest
-    strategy:
-      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
-    if: matrix.environment == 'Production'
-    environment: ${{ matrix.environment }}
+    environment: Production
     steps:
     - name: Run Pester
       shell: pwsh
       run: echo "Hello"
 
   testenv2:
-    needs: [tenantprep, testenv]
+    needs: [testenv]
     runs-on: windows-latest
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
-    if: matrix.environment == 'Production'
-    environment: ${{ matrix.environment }}
+    environment: Production
     steps:
     - name: Run Pester
       shell: pwsh
