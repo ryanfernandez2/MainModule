@@ -20,7 +20,7 @@ jobs:
       - id: set-matrix
         run: |
           TASKS=$(echo $(cat .github/workflows/TenantList.json) | sed 's/ //g')
-          echo "::set-output name=stag_config::$TASKS"
+          echo "::set-output name=config::$TASKS"
 
   build:
     runs-on: windows-latest
