@@ -31,7 +31,7 @@ jobs:
           get-childitem
           get-childitem -path .\TaskImageResize
           get-childitem -path .\TaskImageResize\src
-          dotnet publish .TaskImageResize/src/TaskImageResize.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+          dotnet publish D:\a\MainModule\MainModule\TaskImageResize\src\TaskImageResize.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
 
       - name: Package Functions
         uses: actions/upload-artifact@v1 # find where the files go to.
