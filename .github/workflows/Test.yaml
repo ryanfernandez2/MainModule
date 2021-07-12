@@ -14,10 +14,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+          token: ${{ secrets.IMAGE_PAT }}
+
       - name: Get submodule hash
         run: |
-          git --version
+          cd TaskImageResize
+          git rev-parse HEAD
 
 
   
