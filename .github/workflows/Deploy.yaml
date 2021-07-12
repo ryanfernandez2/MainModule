@@ -74,7 +74,6 @@ jobs:
 
   deploy:
     needs: [build, predeploytests, tenantprep] # the step that sets the json output is a requirement here (in 'needs'), irrespective of whether it was checked before.
-    environment: Staging
     runs-on: windows-latest
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}
