@@ -1,6 +1,5 @@
 {
     "include":[
-        { "environment": "Staging", "functionname": "igusp-subb-fn-wsyql", "secretname": "SUBB_AZURE_CREDENTIALS", "resourcegroup": "igusp-subb-rg-wsyql", "storageaccount": "iguspsubbsawsyql", "queuename": "queue", "blobname": "imageresize" },
-        { "environment": "Production", "functionname": "igusp-subc-fn-dgyhk", "secretname": "SUBC_AZURE_CREDENTIALS", "resourcegroup": "igusp-subc-rg-dgyhk", "storageaccount": "iguspsubcsadgyhk", "queuename": "queue", "blobname": "imageresize" }
+        { "functionname": "igusp-subc-fn-dgyhk", "secretname": "SUBC_AZURE_CREDENTIALS", "resourcegroup": "igusp-subc-rg-dgyhk", "storageaccount": "iguspsubcsadgyhk", "queuename": "queue", "blobname": "imageresize" }
     ]
 }
