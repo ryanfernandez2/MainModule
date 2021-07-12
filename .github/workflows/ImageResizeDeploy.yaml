@@ -20,9 +20,9 @@ jobs:
       - uses: actions/checkout@v2
       - id: set-matrix
         run: |
-          TASKS=$(echo $(cat .github/workflows/StagingList.json) | sed 's/ //g')
+          TASKS=$(echo $(cat .github/workflows/ImageResize/StagingList.json) | sed 's/ //g')
           echo "::set-output name=stag_config::$TASKS"
-          TASKS=$(echo $(cat .github/workflows/ProductionList.json) | sed 's/ //g')
+          TASKS=$(echo $(cat .github/workflows/ImageResize/ProductionList.json) | sed 's/ //g')
           echo "::set-output name=prod_config::$TASKS"
 
   build:
@@ -73,7 +73,7 @@ jobs:
           $env:StorageAccount = "${{ matrix.storageaccount }}"
           $env:QueueName = "${{ matrix.queuename }}"
           $env:BlobName = "${{ matrix.blobname }}"
-          Invoke-Pester ./DevOps/PreDeploy.Tests.ps1 -passthru
+          Invoke-Pester ./DevOps/ImageResize/PreDeploy.Tests.ps1 -passthru
 
   deploy:
     needs: [tenantprep, build, stag_predeploytests] # the step that sets the json output is a requirement here (in 'needs'), irrespective of whether it was checked before.
@@ -123,7 +123,7 @@ jobs:
           $env:StorageAccount = "${{ matrix.storageaccount }}"
           $env:QueueName = "${{ matrix.queuename }}"
           $env:ContainerName = "${{ matrix.blobname }}"
-          Invoke-Pester ./DevOps/PostDeploy.Tests.ps1 -passthru
+          Invoke-Pester ./DevOps/ImageResize/PostDeploy.Tests.ps1 -passthru
 
 #*****************************************
 #           PRODUCTION ACTIONS
@@ -153,7 +153,7 @@ jobs:
           $env:StorageAccount = "${{ matrix.storageaccount }}"
           $env:QueueName = "${{ matrix.queuename }}"
           $env:BlobName = "${{ matrix.blobname }}"
-          Invoke-Pester ./DevOps/PreDeploy.Tests.ps1 -passthru
+          Invoke-Pester ./DevOps/ImageResize/PreDeploy.Tests.ps1 -passthru
 
       - name: Download Function
         uses: actions/download-artifact@v1
@@ -174,4 +174,4 @@ jobs:
           $env:StorageAccount = "${{ matrix.storageaccount }}"
           $env:QueueName = "${{ matrix.queuename }}"
           $env:ContainerName = "${{ matrix.blobname }}"
-          Invoke-Pester ./DevOps/PostDeploy.Tests.ps1 -passthru
+          Invoke-Pester ./DevOps/ImageResize/PostDeploy.Tests.ps1 -passthru

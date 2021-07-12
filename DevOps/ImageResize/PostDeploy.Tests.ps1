@@ -1,7 +1,11 @@
 Install-Module Az.Storage -Force -AllowClobber
 
 Describe "Post depoy test(s)"{
-    It "Test Image resize sample"{
+    It "Check if function is running" {
+
+    }
+
+    It "Test Image resize sample" {
         $maxTries = 100
         $resizeFailed = $false
         $randNumber = [string](Get-Date -Format yyyyMMddHHmmss)
@@ -9,7 +13,7 @@ Describe "Post depoy test(s)"{
         $resultFileName = "cdtest_$randNumber-100x100.jpg"
 
         $storageAccount = Get-AzStorageAccount -ResourceGroupName $env:ResourceGroup -Name $env:StorageAccount
-        Set-AzStorageBlobContent -File .\DevOps\TestDrawing.jpg -Container $env:ContainerName -Blob $uploadFileName -Context $storageAccount.Context
+        Set-AzStorageBlobContent -File .\DevOps\ImageResize\TestDrawing.jpg -Container $env:ContainerName -Blob $uploadFileName -Context $storageAccount.Context
 
         $queueMessage = @"
 {

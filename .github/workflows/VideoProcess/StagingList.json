@@ -1,0 +1,6 @@
+{
+    "include":[
+        { "functionname": "igusp-suba-fn-videoprocess-fdzap", "secretname": "SUBA_AZURE_CREDENTIALS", "resourcegroup": "igusp-suba-rg-fdzap", "storageaccount": "iguspsubasavidiprocfdzap", "queuename": "queue", "blobname": "videoprocess" }
+        
+    ]
+}
