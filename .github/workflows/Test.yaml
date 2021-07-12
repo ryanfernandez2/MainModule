@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - id: set-matrix
         run: |
-          TASKS=$(echo $(cat .github/workflows/StagingList.json) | sed 's/ //g')
+          TASKS=$(echo $(cat .github/workflows/TenantList.json) | sed 's/ //g')
           echo "::set-output name=config::$TASKS"
 
   testenv:
@@ -35,7 +35,7 @@ jobs:
       run: echo "Hello"
 
   testenv2:
-    needs: [tenantprep]
+    needs: [tenantprep, testenv]
     runs-on: windows-latest
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
