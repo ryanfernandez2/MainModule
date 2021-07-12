@@ -8,33 +8,16 @@ on:
   # Change to pull_request and 'main'
   push:
     branches:
-      - none
+      - main
 
 jobs:
-  tenantprep:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      stag_config: ${{ steps.set-matrix.outputs.stag_config }}
-      prod_config: ${{ steps.set-matrix.outputs.prod_config }}
     steps:
-      - uses: actions/checkout@v2
-      - id: set-matrix
+      
+      - name: Get submodule hash
         run: |
-          TASKS=$(echo $(cat .github/workflows/StagingList.json) | sed 's/ //g')
-          echo "::set-output name=stag_config::$TASKS"
-          TASKS=$(echo $(cat .github/workflows/ProductionList.json) | sed 's/ //g')
-          echo "::set-output name=prod_config::$TASKS"
-
-  testenv:
-    needs: [tenantprep]
-    runs-on: windows-latest
-    strategy:
-      matrix: ${{ fromJson(needs.tenantprep.outputs.prod_config) }}
-    environment: Production
-    steps:
-    - name: Run Pester
-      shell: pwsh
-      run: echo "Hello"
+          echo git --version
 
 
   
