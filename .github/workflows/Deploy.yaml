@@ -50,7 +50,7 @@ jobs:
     needs: [tenantprep]
     runs-on: windows-latest
     strategy:
-      matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
     environment: ${{ matrix.environment }}
     steps:
       - name: 'Checkout GitHub Action'
@@ -76,7 +76,7 @@ jobs:
     needs: [build, predeploytests, tenantprep] # the step that sets the json output is a requirement here (in 'needs'), irrespective of whether it was checked before.
     runs-on: windows-latest
     strategy:
-      matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
     environment: ${{ matrix.environment }}
     steps:
       - name: Download Function
@@ -101,7 +101,7 @@ jobs:
     needs: [tenantprep, deploy]
     runs-on: windows-latest
     strategy:
-      matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}    
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}    
     environment: ${{ matrix.environment }}
     steps:
       - name: 'Checkout GitHub Action'
