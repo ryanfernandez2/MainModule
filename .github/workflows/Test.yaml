@@ -17,7 +17,7 @@ jobs:
       
       - name: Get submodule hash
         run: |
-          echo ${{ git --version }}
+          git --version
 
 
   
