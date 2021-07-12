@@ -28,6 +28,8 @@ jobs:
       matrix: ${{ fromJson(needs.tenantprep.outputs.stag_config) }}
     environment: ${{ matrix.environment }}
     steps:
+    - name: Run Pester
+      shell: pwsh
       run: echo "Hello"
 
   
