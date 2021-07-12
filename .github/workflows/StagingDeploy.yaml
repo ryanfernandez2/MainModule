@@ -1,0 +1,123 @@
+name: Build and Deploy
+env:
+  OUTPUT_PATH: ${{ github.workspace }}\.output
+  DOTNET_VERSION: "3.1.*"
+  # FUNCTION_NAME: "ImageResizeTask" # moved inside jobs to work with matrices
+
+on:
+  # Change to pull_request and 'main'
+  push:
+    branches:
+      - none
+
+jobs:
+  tenantprep:
+    runs-on: ubuntu-latest
+    outputs:
+      config: ${{ steps.set-matrix.outputs.config }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        run: |
+          TASKS=$(echo $(cat .github/workflows/TenantList.json) | sed 's/ //g')
+          echo "::set-output name=config::$TASKS"
+
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+          token: ${{ secrets.IMAGE_PAT }}
+      
+      - name: Setup Dotnet Env
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Publish Funcions
+        shell: pwsh
+        run: dotnet publish .\TaskImageResize\src\TaskImageResize.csproj --configuration Release --output ${{ env.OUTPUT_PATH }}
+
+      - name: Package Functions
+        uses: actions/upload-artifact@v1 # find where the files go to.
+        with:
+          name: ImageResizeFunction
+          path: ${{ env.OUTPUT_PATH }}
+
+  predeploytests:
+    needs: [tenantprep]
+    runs-on: windows-latest
+    strategy:
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
+    environment: ${{ matrix.environment }}
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2
+
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets[matrix.secretname] }}
+          enable-AzPSSession: true
+          
+      - name: Run Pester
+        shell: pwsh
+        run: | 
+          $env:FunctionName = "${{ matrix.functionname }}"
+          $env:ResourceGroup = "${{ matrix.resourcegroup }}"
+          $env:StorageAccount = "${{ matrix.storageaccount }}"
+          $env:QueueName = "${{ matrix.queuename }}"
+          $env:BlobName = "${{ matrix.blobname }}"
+          Invoke-Pester ./DevOps/PreDeploy.Tests.ps1 -passthru
+
+  deploy:
+    needs: [build, predeploytests, tenantprep] # the step that sets the json output is a requirement here (in 'needs'), irrespective of whether it was checked before.
+    runs-on: windows-latest
+    strategy:
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
+    environment: ${{ matrix.environment }}
+    steps:
+      - name: Download Function
+        uses: actions/download-artifact@v1
+        with:
+          name: ImageResizeFunction
+          path: ${{ env.OUTPUT_PATH }}
+
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets[matrix.secretname] }}
+
+      - name: "Run Azure Deployment"
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ matrix.functionname }}
+          package: ${{ env.OUTPUT_PATH }}
+          #Check when function is stopped
+
+  postdeploytests:
+    needs: [tenantprep, deploy]
+    runs-on: windows-latest
+    strategy:
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}    
+    environment: ${{ matrix.environment }}
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2
+
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets[matrix.secretname] }}
+          enable-AzPSSession: true
+          
+      - name: Run Pester
+        shell: pwsh
+        run: | 
+          $env:ResourceGroup = "${{ matrix.resourcegroup }}"
+          $env:StorageAccount = "${{ matrix.storageaccount }}"
+          $env:QueueName = "${{ matrix.queuename }}"
+          $env:ContainerName = "${{ matrix.blobname }}"
+          Invoke-Pester ./DevOps/PostDeploy.Tests.ps1 -passthru

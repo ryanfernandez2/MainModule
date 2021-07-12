@@ -8,7 +8,7 @@ on:
   # Change to pull_request and 'main'
   push:
     branches:
-      - none
+      - main
 
 jobs:
   tenantprep:
@@ -27,6 +27,19 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
+    if: ${{ matrix.environment == "Production" }}
+    environment: ${{ matrix.environment }}
+    steps:
+    - name: Run Pester
+      shell: pwsh
+      run: echo "Hello"
+
+  testenv2:
+    needs: [tenantprep]
+    runs-on: windows-latest
+    strategy:
+      matrix: ${{ fromJson(needs.tenantprep.outputs.config) }}
+    if: ${{ matrix.environment == "Production" }}
     environment: ${{ matrix.environment }}
     steps:
     - name: Run Pester
