@@ -21,7 +21,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v1
         with:
-          creds: SUBA_AZURE_CREDENTIALS
+          creds: secrets.SUBA_AZURE_CREDENTIALS
           enable-AzPSSession: true
           
       - name: Run Pester
