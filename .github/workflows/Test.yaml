@@ -34,7 +34,7 @@ jobs:
           $env:StorageAccount = "iguspsubasavidiprocfdzap"
           $env:QueueName = "queue"
           $env:ContainerName = "videoprocess"
-          get-childitem -recursive
+          get-childitem -recurse
           Invoke-Pester ./DevOps/VideoProcess/PostDeploy.Tests.ps1 -passthru
 
   
