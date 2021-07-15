@@ -1,11 +1,7 @@
 Install-Module Az.Storage -Force -AllowClobber
 
-Describe "Post depoy test(s)"{
-    It "Check if function is running" {
-
-    }
-
-    It "Test Image resize sample" {
+Describe "Post depoy tests"{
+    BeforeAll{
         $maxTries = 200
         $uploadFileLocation = ".\DevOps\VideoProcess\SampleVideo1MB.mp4"
         $resizeFailed = $false
@@ -46,20 +42,24 @@ Describe "Post depoy test(s)"{
             {
                 Get-AzStorageBlobContent -Blob $resultVideoFileName -Container $env:ContainerName -Context $storageAccount.Context -Force
                 Get-AzStorageBlobContent -Blob $resultThumbnailFileName -Container $env:ContainerName -Context $storageAccount.Context -Force
-                [void][System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
-                $Image = [System.Drawing.Image]::FromFile($(Resolve-Path $resultThumbnailFileName))
-                $Image.Width | Should -BeGreaterOrEqual 1
-                $image.Height | Should -BeGreaterOrEqual 1
-                $videoInfo = [string]$(.\TaskVideoProcess\src\Components\ffprobe.exe -show_streams -pretty $($resultVideoFileName))
-                $videoInfo | Should -Match "codec_name=h264"
+                
             }
-            else {
-                "" | Should -Not -BeNullOrEmpty
-            }
-            # Removing test files.
+        }
+        AfterAll {            
             Remove-AzStorageBlob -Blob $uploadFileName -Container $env:ContainerName -Context $storageAccount.Context
             Remove-AzStorageBlob -Blob $resultVideoFileName -Container $env:ContainerName -Context $storageAccount.Context
             Remove-AzStorageBlob -Blob $resultThumbnailFileName -Container $env:ContainerName -Context $storageAccount.Context
         }
+    }
+    It "Check if video got processed" {
+        $videoInfo = [string]$(.\TaskVideoProcess\src\Components\ffprobe.exe -show_streams -pretty $($resultVideoFileName))
+        $videoInfo | Should -Match "codec_name=h264"
+    }
+
+    It "Check if thumbnail got generated" {        
+        [void][System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+        $Image = [System.Drawing.Image]::FromFile($(Resolve-Path $resultThumbnailFileName))
+        $Image.Width | Should -BeGreaterOrEqual 1
+        $image.Height | Should -BeGreaterOrEqual 1
     }
 }
