@@ -8,7 +8,7 @@ on:
   # Change to pull_request and 'main'
   push:
     branches:
-      - none
+      - main
 
 jobs:
   Pester:
