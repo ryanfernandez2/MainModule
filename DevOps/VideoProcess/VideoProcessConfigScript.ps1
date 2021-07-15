@@ -59,7 +59,7 @@ try
     # Update function application settings
     $saKey = (Get-AzStorageAccountKey -ResourceGroupName $resourceGroupName -Name $storageAccountName | Where-Object {$_.KeyName -eq "key1"}).Value
     $connectionString = "DefaultEndpointsProtocol=https;AccountName=$($storageAccountName);AccountKey=$($saKey);EndpointSuffix=core.windows.net"
-    Update-AzFunctionAppSetting -Name $functionName -ResourceGroupName $resourceGroupName -AppSetting @{"ConnectionString" = $connectionString; "TempPath" = $tempPath; "ComponentPath" = $componentsPath}
+    Update-AzFunctionAppSetting -Name $functionName -ResourceGroupName $resourceGroupName -AppSetting @{"ConnectionString" = $connectionString; "TempPath" = $tempPath; "ComponentsPath" = $componentsPath}
     # Update function app managed identity
     Update-AzFunctionApp -Name $functionName -ResourceGroupName $resourceGroupName -IdentityType SystemAssigned
     $managedIdentityId = (Get-AzADServicePrincipal -DisplayNameBeginsWith $functionName).Id

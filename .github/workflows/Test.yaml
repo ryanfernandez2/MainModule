@@ -11,19 +11,26 @@ on:
       - none
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  Pester:
+    runs-on: windows-latest
+    environment: Staging
     steps:
-      - name: Checkout
+      - name: 'Checkout GitHub Action'
         uses: actions/checkout@v2
+
+      - name: Azure login
+        uses: azure/login@v1
         with:
-          submodules: 'true'
-          token: ${{ secrets.IMAGE_PAT }}
-
-      - name: Get submodule hash
-        run: |
-          cd TaskImageResize
-          git rev-parse HEAD
-
+          creds: SUBA_AZURE_CREDENTIALS
+          enable-AzPSSession: true
+          
+      - name: Run Pester
+        shell: pwsh
+        run: | 
+          $env:ResourceGroup = "igusp-suba-rg-fdzap"
+          $env:StorageAccount = "iguspsubasavidiprocfdzap"
+          $env:QueueName = "queue"
+          $env:ContainerName = "videoprocess"
+          Invoke-Pester ./DevOps/VideoProcess/PostDeploy.Tests.ps1 -passthru
 
   

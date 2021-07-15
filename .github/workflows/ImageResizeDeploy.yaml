@@ -7,7 +7,7 @@ on:
   # Change to pull_request and 'main'
   push:
     branches:
-      - main
+      - none
 
 jobs:
   tenantprep:
@@ -124,9 +124,9 @@ jobs:
           $env:ContainerName = "${{ matrix.blobname }}"
           Invoke-Pester ./DevOps/ImageResize/PostDeploy.Tests.ps1 -passthru
 
-#*****************************************
-#           PRODUCTION ACTIONS
-#*****************************************
+#******************************************
+#           PRODUCTION ACTIONS            *
+#******************************************
 
   prod_deploy:
     needs: [tenantprep, build]

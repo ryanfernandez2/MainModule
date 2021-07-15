@@ -63,5 +63,5 @@ Describe "Post depoy test(s)"{
             Remove-AzStorageBlob -Blob $uploadFileName -Container $env:ContainerName -Context $storageAccount.Context
             Remove-AzStorageBlob -Blob $resultFileName -Container $env:ContainerName -Context $storageAccount.Context
         }
-    }   
+    }
 }
