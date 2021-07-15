@@ -27,7 +27,7 @@ Describe "Post depoy tests"{
             $storageQueue.CloudQueue.AddMessageAsync([Microsoft.Azure.Storage.Queue.CloudQueueMessage]::new($queueMessage))
             
             $tries = 0
-            while(!(Get-AzStorageBlob -Blob $resultFileName -Container $env:ContainerName -Context $storageAccount.Context -ErrorAction SilentlyContinue))
+            while(!(Get-AzStorageBlob -Blob $resultVideoFileName -Container $env:ContainerName -Context $storageAccount.Context -ErrorAction SilentlyContinue))
             {
                 Start-Sleep -Seconds 3
                 Write-Output "Waiting for test video to be processed..."
